@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/controllers/time_controller.dart';
 import 'package:my_portfolio/screens/apps/calculator.dart';
-import 'package:my_portfolio/screens/apps/notes.dart';
+import 'package:my_portfolio/screens/apps/note/notes.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({super.key});
