@@ -25,7 +25,6 @@ class CustomThemeData {
       cardTheme: CardTheme(
         color: primaryTextColor,
         elevation: 5,
-        
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),

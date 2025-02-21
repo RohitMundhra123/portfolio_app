@@ -65,9 +65,19 @@ class NotesDatabaseService {
     );
   }
 
-  Future<int> deleteNote(int id) async {
+  Future<int> deleteNotes(List<int> ids) async {
     Database db = await instance.database;
-    return db.delete(tableName, where: '$columnId = ?', whereArgs: [id]);
+    int deletedCount = 0;
+
+    for (int id in ids) {
+      deletedCount += await db.delete(
+        tableName,
+        where: '$columnId = ?',
+        whereArgs: [id],
+      );
+    }
+
+    return deletedCount;
   }
 
   Future closeDb() async {
