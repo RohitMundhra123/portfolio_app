@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/controllers/time_controller.dart';
 import 'package:my_portfolio/screens/apps/calculator.dart';
+import 'package:my_portfolio/screens/apps/calendar/calendar.dart';
 import 'package:my_portfolio/screens/apps/note/notes.dart';
 
 class FirstPage extends StatefulWidget {
@@ -69,11 +70,11 @@ class _FirstPageState extends State<FirstPage> {
         );
       }),
       _appButton('Calendar', Icons.calendar_month, () {
-        // Get.to(
-        //   () => const CalendarApp(),
-        //   transition: Transition.fadeIn,
-        //   duration: const Duration(milliseconds: 500),
-        // );
+        Get.to(
+          () => const CalendarApp(),
+          transition: Transition.fadeIn,
+          duration: const Duration(milliseconds: 500),
+        );
       }),
       _appButton('Clock', Icons.punch_clock_outlined, () {
         // Get.to(

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:my_portfolio/helper/date.dart';
+import 'package:my_portfolio/utils/date.dart';
 
 class TimeController extends GetxController {
   var currentTime = DateTime.now().obs;

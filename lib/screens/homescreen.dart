@@ -18,16 +18,10 @@ class _HomeScreenState extends State<HomeScreen> {
   );
 
   Widget _body() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Column(
-          children: [
-            _pageView(constraints),
-            _pageIndicator(),
-            _bottomMenuBar(constraints),
-          ],
-        );
-      },
+    return SafeArea(
+      child: Column(
+        children: [_pageView(), _pageIndicator(), _bottomMenuBar()],
+      ),
     );
   }
 
@@ -77,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _pageView(BoxConstraints constraints) {
+  Widget _pageView() {
     return Expanded(
       child: PageView.builder(
         controller: homeScreenController.pageController,
@@ -113,10 +107,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _bottomMenuBar(BoxConstraints constraints) {
+  Widget _bottomMenuBar() {
     return GridView.count(
       shrinkWrap: true,
-      crossAxisCount: constraints.maxWidth ~/ 75,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      crossAxisCount: Get.width ~/ 75,
       physics: ClampingScrollPhysics(),
       scrollDirection: Axis.vertical,
       crossAxisSpacing: 10,

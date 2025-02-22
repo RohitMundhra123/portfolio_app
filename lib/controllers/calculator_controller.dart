@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:my_portfolio/helper/calculatorhelper.dart';
+import 'package:my_portfolio/utils/calculatorhelper.dart';
 
 class CalculatorController extends GetxController {
   TextEditingController expressionController = TextEditingController();

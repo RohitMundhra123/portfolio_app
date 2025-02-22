@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/controllers/calculator_controller.dart';
-import 'package:my_portfolio/helper/calculatorhelper.dart';
+import 'package:my_portfolio/utils/calculatorhelper.dart';
 import 'package:my_portfolio/widgets/appbar_widget.dart';
 
 class CalculatorApp extends StatefulWidget {
@@ -117,6 +117,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: appBar("Calculator"), body: _body());
+    return Scaffold(appBar: customAppBar("Calculator"), body: _body());
   }
 }

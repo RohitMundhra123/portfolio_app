@@ -117,7 +117,7 @@ class _NoteAppState extends State<NoteApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Notes"),
+      appBar: customAppBar("Notes"),
       body: _body(),
       floatingActionButton: Obx(
         () => FloatingActionButton(

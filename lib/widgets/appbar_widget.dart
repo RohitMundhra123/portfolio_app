@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-AppBar appBar(String title) {
+AppBar customAppBar(String title) {
   return AppBar(
     leading: Hero(tag: title, child: Icon(getIcon(title), size: 36)),
     title: Text(title),
