@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/controllers/notes_controller.dart';
 import 'package:my_portfolio/models/notes_model.dart';
-import 'package:my_portfolio/widgets/custom_snackbar.dart';
-import 'package:my_portfolio/widgets/textformfield/content_textformfield.dart';
-import 'package:my_portfolio/widgets/textformfield/title_textformfield.dart';
+import 'package:my_portfolio/utils/widgets/custom_snackbar.dart';
+import 'package:my_portfolio/utils/widgets/textformfield/content_textformfield.dart';
+import 'package:my_portfolio/utils/widgets/textformfield/title_textformfield.dart';
 
 class AddNote extends StatefulWidget {
   const AddNote({super.key, required this.notesController, this.note});

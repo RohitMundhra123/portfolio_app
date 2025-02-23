@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:my_portfolio/controllers/notes_controller.dart';
 import 'package:my_portfolio/models/notes_model.dart';
 import 'package:my_portfolio/screens/apps/note/addnote.dart';
-import 'package:my_portfolio/widgets/appbar_widget.dart';
-import 'package:my_portfolio/widgets/custom_snackbar.dart';
+import 'package:my_portfolio/utils/widgets/appbar_widget.dart';
+import 'package:my_portfolio/utils/widgets/custom_snackbar.dart';
 
 class NoteApp extends StatefulWidget {
   const NoteApp({super.key});

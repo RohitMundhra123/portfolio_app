@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:my_portfolio/constants/theme.dart';
 import 'package:my_portfolio/controllers/calendar_controller.dart';
 import 'package:my_portfolio/utils/date.dart';
-import 'package:my_portfolio/widgets/appbar_widget.dart';
+import 'package:my_portfolio/utils/widgets/appbar_widget.dart';
 
 class CalendarApp extends StatefulWidget {
   const CalendarApp({super.key});
