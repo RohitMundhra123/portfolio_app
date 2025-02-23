@@ -6,10 +6,12 @@ class TitleTextformfield extends StatelessWidget {
     super.key,
     required this.titleController,
     required this.focusNode,
+    this.hintText,
   });
 
   final TextEditingController titleController;
   final FocusNode focusNode;
+  final String? hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class TitleTextformfield extends StatelessWidget {
       maxLines: null,
       focusNode: focusNode,
       decoration: InputDecoration(
-        hintText: 'Heading',
+        hintText: hintText ?? 'Heading',
         hintStyle: Get.textTheme.headlineLarge?.copyWith(
           color: Colors.grey,
           fontWeight: FontWeight.w600,

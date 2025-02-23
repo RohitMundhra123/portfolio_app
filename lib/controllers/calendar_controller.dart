@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:my_portfolio/models/calendar_model.dart';
+import 'package:my_portfolio/services/calendar_db_service/calendar_db_services.dart';
 
 class YearRange {
   int startYear;
@@ -25,9 +27,15 @@ class CalendarController extends GetxController {
   late final RxInt selectedYear;
   late final Rx<YearRange> yearRange;
   late final List<YearRange> yearRanges = [];
+  RxList<CalendarModel> events = <CalendarModel>[].obs;
 
   final ScrollController monthScrollController = ScrollController();
   final PageController yearPageController = PageController();
+
+  final CalendarDbServices _calendarDbServices = CalendarDbServices();
+
+  String get formatDateForDb =>
+      '${selectedYear.value}-${selectedMonth.value}-${selectedDay.value}';
 
   @override
   void onInit() {
@@ -139,5 +147,21 @@ class CalendarController extends GetxController {
 
   int getCountofGrid() {
     return getDaysInMonth() + getgap() - 1;
+  }
+
+  addEvent(String date, String title, String description, DateTime time) async {
+    await _calendarDbServices.addEvent(date, title, description, time);
+  }
+
+  getEvent() async {
+    events.value = await _calendarDbServices.getEventByDate(formatDateForDb);
+  }
+
+  updateEvent(CalendarModel event) async {
+    await _calendarDbServices.updateEvent(event);
+  }
+
+  deleteEvent(int id) async {
+    await _calendarDbServices.deleteEvent(id);
   }
 }

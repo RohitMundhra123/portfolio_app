@@ -6,10 +6,12 @@ class ContentTextformfield extends StatelessWidget {
     super.key,
     required this.contentController,
     required this.focusNode,
+    this.hintText,
   });
 
   final TextEditingController contentController;
   final FocusNode focusNode;
+  final String? hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class ContentTextformfield extends StatelessWidget {
       focusNode: focusNode,
       style: Get.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
       decoration: InputDecoration(
-        hintText: 'Content',
+        hintText: hintText ?? 'Content',
         hintStyle: Get.textTheme.headlineSmall?.copyWith(
           color: Colors.grey,
           fontWeight: FontWeight.w600,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/constants/theme.dart';
 import 'package:my_portfolio/controllers/calendar_controller.dart';
+import 'package:my_portfolio/screens/apps/calendar/addcalendarevent.dart';
 import 'package:my_portfolio/utils/date.dart';
 import 'package:my_portfolio/utils/widgets/appbar_widget.dart';
 
@@ -345,6 +346,17 @@ class _CalendarAppState extends State<CalendarApp> {
     return Scaffold(
       appBar: customAppBar('Calendar'),
       body: SafeArea(child: _body()),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Get.theme.primaryColor,
+        onPressed: () async {
+          Get.to(
+            () => AddCalendarEvent(calendarController: _calendarController),
+            transition: Transition.fade,
+            duration: const Duration(milliseconds: 500),
+          );
+        },
+        child: Icon(Icons.add, color: Colors.white),
+      ),
     );
   }
 }
