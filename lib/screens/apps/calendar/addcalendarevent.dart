@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_portfolio/constants/theme.dart';
 import 'package:my_portfolio/controllers/calendar_controller.dart';
-
 import 'package:my_portfolio/models/calendar_model.dart';
-
 import 'package:my_portfolio/utils/widgets/custom_snackbar.dart';
 import 'package:my_portfolio/utils/widgets/textformfield/content_textformfield.dart';
 import 'package:my_portfolio/utils/widgets/textformfield/title_textformfield.dart';
@@ -28,6 +27,8 @@ class _AddCalendarEventState extends State<AddCalendarEvent> {
   final FocusNode _contentFocusNode = FocusNode();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
+  RxInt _hour = DateTime.now().hour.obs;
+  RxInt _minute = DateTime.now().minute.obs;
   final ScrollController _scrollController = ScrollController();
   late bool _isEdit;
 
@@ -87,7 +88,13 @@ class _AddCalendarEventState extends State<AddCalendarEvent> {
                   date: _calendarController.formatDateForDb,
                   title: _titleController.text,
                   description: _contentController.text,
-                  time: DateTime.now(),
+                  time: DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month,
+                    DateTime.now().day,
+                    _hour.value,
+                    _minute.value,
+                  ),
                 ),
               );
               if (res) {
@@ -103,7 +110,13 @@ class _AddCalendarEventState extends State<AddCalendarEvent> {
                 _calendarController.formatDateForDb,
                 _titleController.text,
                 _contentController.text,
-                DateTime.now(),
+                DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                  _hour.value,
+                  _minute.value,
+                ),
               );
               if (res) {
                 Get.back();
@@ -137,6 +150,7 @@ class _AddCalendarEventState extends State<AddCalendarEvent> {
           color: Colors.transparent,
           child: Column(
             children: [
+              _dateTile(),
               TitleTextformfield(
                 titleController: _titleController,
                 focusNode: _titleFocusNode,
@@ -152,6 +166,133 @@ class _AddCalendarEventState extends State<AddCalendarEvent> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _dateTile() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15, bottom: 30),
+      child: GestureDetector(
+        onTap: () {
+          Get.dialog(_setTimeDialog());
+        },
+        child: Row(
+          children: [
+            const Icon(Icons.lock_clock),
+            const SizedBox(width: 10),
+            Text(
+              "Set Time",
+              style: Get.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Spacer(),
+            Obx(
+              () => Text(
+                "${_hour.toString().padLeft(2, '0')} : ${_minute.toString().padLeft(2, '0')}",
+                style: Get.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _setTimeDialog() {
+    return AlertDialog(
+      backgroundColor: Get.theme.primaryColor,
+      title: Text(
+        "Set Time",
+        style: Get.textTheme.headlineMedium?.copyWith(color: Colors.white),
+      ),
+      content: StatefulBuilder(
+        builder: (context, setState) {
+          return Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _timeText(true),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    ":",
+                    style: Get.textTheme.headlineLarge?.copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                _timeText(false),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _timeText(bool isHour) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          visualDensity: VisualDensity(vertical: -2),
+          icon: Icon(Icons.arrow_drop_up, color: Colors.white, size: 30),
+          onPressed: () {
+            if (isHour) {
+              if (_hour.value == 23) {
+                _hour.value = 0;
+              } else {
+                _hour++;
+              }
+            } else {
+              if (_minute.value == 59) {
+                _minute.value = 0;
+              } else {
+                _minute++;
+              }
+            }
+          },
+        ),
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: CustomThemeData.primaryColorLight,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            isHour
+                ? _hour.toString().padLeft(2, '0')
+                : _minute.toString().padLeft(2, '0'),
+            style: Get.textTheme.headlineSmall,
+          ),
+        ),
+        IconButton(
+          visualDensity: VisualDensity(vertical: -2),
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.white,
+            size: 30,
+          ),
+          onPressed: () {
+            if (isHour) {
+              if (_hour.value == 0) {
+                _hour.value = 23;
+              } else {
+                _hour--;
+              }
+            } else {
+              if (_minute.value == 0) {
+                _minute.value = 59;
+              } else {
+                _minute--;
+              }
+            }
+          },
+        ),
+      ],
     );
   }
 
