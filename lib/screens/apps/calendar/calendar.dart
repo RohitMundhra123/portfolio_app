@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/constants/theme.dart';
 import 'package:my_portfolio/controllers/calendar_controller.dart';
+import 'package:my_portfolio/models/calendar_model.dart';
 import 'package:my_portfolio/screens/apps/calendar/addcalendarevent.dart';
 import 'package:my_portfolio/utils/date.dart';
 import 'package:my_portfolio/utils/widgets/appbar_widget.dart';
+import 'package:my_portfolio/utils/widgets/custom_snackbar.dart';
 
 class CalendarApp extends StatefulWidget {
   const CalendarApp({super.key});
@@ -36,11 +38,13 @@ class _CalendarAppState extends State<CalendarApp> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 20,
             children: [
               _yearContainer(),
               _monthContainer(),
               _weekanddayContainer(),
+              _eventContainer(),
             ],
           ),
         ),
@@ -338,6 +342,118 @@ class _CalendarAppState extends State<CalendarApp> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _eventContainer() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Events", style: Get.textTheme.headlineMedium),
+          Obx(
+            () =>
+                _calendarController.events.isEmpty
+                    ? Padding(
+                      padding: const EdgeInsets.only(top: 50),
+                      child: Center(
+                        child: Text(
+                          "No Events Added",
+                          style: Get.textTheme.headlineSmall?.copyWith(
+                            color: CustomThemeData.secondaryTextColor,
+                          ),
+                        ),
+                      ),
+                    )
+                    : ListView.separated(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(top: 15),
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _calendarController.events.length,
+                      separatorBuilder: (context, index) {
+                        return Divider(
+                          color: CustomThemeData.dividerColor,
+                          thickness: 1,
+                          height: 30,
+                        );
+                      },
+                      itemBuilder: (context, index) {
+                        return _eventTile(_calendarController.events[index]);
+                      },
+                    ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _eventTile(CalendarModel event) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              Get.to(
+                () => AddCalendarEvent(
+                  calendarController: _calendarController,
+                  calendarModel: event,
+                ),
+                transition: Transition.fade,
+                duration: const Duration(milliseconds: 500),
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        event.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Get.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      event.formatTime(),
+                      style: Get.textTheme.headlineSmall?.copyWith(
+                        color: CustomThemeData.primaryColorDark,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                  event.description,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Get.textTheme.titleMedium?.copyWith(
+                    color: CustomThemeData.secondaryTextColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        InkWell(
+          onTap: () async {
+            if (await _calendarController.deleteEvent(event.id)) {
+              CustomSnackBar(
+                message: "Event deleted successfully.",
+                title: "Success",
+              ).show();
+            }
+          },
+          child: Icon(Icons.delete, color: Colors.red),
+        ),
+      ],
     );
   }
 

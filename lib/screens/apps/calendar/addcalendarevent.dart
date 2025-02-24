@@ -65,6 +65,21 @@ class _AddCalendarEventState extends State<AddCalendarEvent> {
         IconButton(
           icon: const Icon(Icons.save_outlined),
           onPressed: () async {
+            if (_titleController.text.isEmpty) {
+              CustomSnackBar(
+                message: "Title can't be empty.",
+                title: "Error",
+              ).show();
+              return;
+            }
+            if (_contentController.text.isEmpty) {
+              CustomSnackBar(
+                message: "Description can't be empty.",
+                title: "Error",
+              ).show();
+              return;
+            }
+
             if (_isEdit) {
               bool res = await _calendarController.updateEvent(
                 CalendarModel(

@@ -9,13 +9,13 @@ class CalendarDbServices {
 
   final db = CalendarDatabase();
 
-  Future<void> addEvent(
+  Future<int> addEvent(
     String date,
     String title,
     String description,
     DateTime time,
   ) async {
-    await db
+    return await db
         .into(db.calendarTable)
         .insert(
           CalendarTableCompanion.insert(
@@ -47,7 +47,6 @@ class CalendarDbServices {
     final event =
         await (db.select(db.calendarTable)
           ..where((tbl) => tbl.date.equals(date))).get();
-
     return event
         .map(
           (e) => CalendarModel(
@@ -61,8 +60,8 @@ class CalendarDbServices {
         .toList();
   }
 
-  Future<void> updateEvent(CalendarModel event) async {
-    await (db.update(db.calendarTable)
+  Future<int> updateEvent(CalendarModel event) async {
+    return await (db.update(db.calendarTable)
       ..where((tbl) => tbl.id.equals(event.id))).write(
       CalendarTableCompanion(
         id: Value(event.id),
@@ -74,7 +73,8 @@ class CalendarDbServices {
     );
   }
 
-  Future<void> deleteEvent(int id) async {
-    await (db.delete(db.calendarTable)..where((tbl) => tbl.id.equals(id))).go();
+  Future<int> deleteEvent(int id) async {
+    return await (db.delete(db.calendarTable)
+      ..where((tbl) => tbl.id.equals(id))).go();
   }
 }

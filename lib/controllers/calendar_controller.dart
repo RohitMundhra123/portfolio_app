@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/models/calendar_model.dart';
 import 'package:my_portfolio/services/calendar_db_service/calendar_db_services.dart';
+import 'package:my_portfolio/utils/widgets/custom_snackbar.dart';
 
 class YearRange {
   int startYear;
@@ -45,6 +46,7 @@ class CalendarController extends GetxController {
     selectedYear = DateTime.now().year.obs;
     selectedMonth = DateTime.now().month.obs;
     selectedDay = DateTime.now().day.obs;
+    getEvent();
     getCurrentYearRange();
     yearPageController.addListener(() {
       final int currentPage = yearPageController.page?.round() ?? 0;
@@ -54,7 +56,15 @@ class CalendarController extends GetxController {
       yearRange.value = yearRanges.firstWhere(
         (range) => range.startYear <= value && range.endYear >= value,
       );
+      getEvent();
     });
+    selectedDay.listen((value) {
+      getEvent();
+    });
+    selectedMonth.listen((value) {
+      getEvent();
+    });
+
     super.onInit();
   }
 
@@ -149,19 +159,49 @@ class CalendarController extends GetxController {
     return getDaysInMonth() + getgap() - 1;
   }
 
-  addEvent(String date, String title, String description, DateTime time) async {
-    await _calendarDbServices.addEvent(date, title, description, time);
+  Future<bool> addEvent(
+    String date,
+    String title,
+    String description,
+    DateTime time,
+  ) async {
+    final res = await _calendarDbServices.addEvent(
+      date,
+      title,
+      description,
+      time,
+    );
+    if (res > 0) {
+      getEvent();
+      return true;
+    }
+    CustomSnackBar(message: "Event add failed.", title: "Error").show();
+    return false;
   }
 
   getEvent() async {
+    events.clear();
     events.value = await _calendarDbServices.getEventByDate(formatDateForDb);
   }
 
-  updateEvent(CalendarModel event) async {
-    await _calendarDbServices.updateEvent(event);
+  Future<bool> updateEvent(CalendarModel event) async {
+    final res = await _calendarDbServices.updateEvent(event);
+    if (res > 0) {
+      getEvent();
+      return true;
+    } else {
+      CustomSnackBar(message: "Event update failed.", title: "Error").show();
+      return false;
+    }
   }
 
-  deleteEvent(int id) async {
-    await _calendarDbServices.deleteEvent(id);
+  Future<bool> deleteEvent(int id) async {
+    final res = await _calendarDbServices.deleteEvent(id);
+    if (res > 0) {
+      getEvent();
+      return true;
+    }
+    CustomSnackBar(message: "Event delete failed.", title: "Error").show();
+    return false;
   }
 }

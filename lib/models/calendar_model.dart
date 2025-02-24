@@ -28,4 +28,8 @@ class CalendarModel {
     'description': description,
     'time': time.toIso8601String(),
   };
+
+  String formatTime() {
+    return '${time.hour.toString().padLeft(2, '0')} : ${time.minute.toString().padLeft(2, '0')}';
+  }
 }
