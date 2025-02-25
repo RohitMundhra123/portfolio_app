@@ -18,7 +18,7 @@ IconData getIcon(String title) {
   } else if (title == 'Settings') {
     return Icons.settings;
   } else if (title == 'Clock') {
-    return Icons.punch_clock_outlined;
+    return Icons.access_time;
   } else if (title == 'Calendar') {
     return Icons.calendar_month;
   } else if (title == 'Music') {

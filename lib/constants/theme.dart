@@ -31,6 +31,20 @@ class CustomThemeData {
           side: BorderSide(color: dividerColor),
         ),
       ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        selectedItemColor: primaryColor,
+        unselectedItemColor: Colors.black87,
+        selectedLabelStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: primaryTextColor,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: primaryTextColor,
+        ),
+      ),
     );
   }
 
@@ -47,6 +61,20 @@ class CustomThemeData {
         iconTheme: IconThemeData(color: primaryTextColor),
         actionsIconTheme: IconThemeData(color: primaryTextColor),
         elevation: 0,
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        selectedItemColor: primaryColor,
+        unselectedItemColor: Colors.black87,
+        selectedLabelStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: primaryTextColor,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: primaryTextColor,
+        ),
       ),
     );
   }

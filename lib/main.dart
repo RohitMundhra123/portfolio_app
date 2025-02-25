@@ -3,7 +3,7 @@ import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:my_portfolio/constants/theme.dart';
 import 'package:my_portfolio/controllers/time_controller.dart';
-import 'package:my_portfolio/screens/lockscreen.dart';
+import 'package:my_portfolio/screens/homescreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: CustomThemeData.getThemeData(),
       darkTheme: CustomThemeData.getDarkThemeData(),
-      home: LockScreen(),
+      home: HomeScreen(),
       initialBinding: BindingsBuilder(() {
         Get.put(TimeController());
       }),
