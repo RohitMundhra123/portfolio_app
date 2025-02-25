@@ -18,6 +18,7 @@ class _ClockAppState extends State<ClockApp> {
     return PageView.builder(
       controller: _clockController.pageController,
       itemCount: 3,
+
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         switch (index) {
