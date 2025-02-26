@@ -12,8 +12,6 @@ class ClockController extends GetxController {
   final RxInt stopWatchMinutes = 0.obs;
   final RxInt stopWatchSeconds = 0.obs;
   final RxInt stopWatchMilliseconds = 0.obs;
-  String get stopWatchTime =>
-      '${stopWatchHours.value > 0 ? '${stopWatchHours.value.toString().padLeft(2, '0')}:' : ''}${stopWatchMinutes.value.toString().padLeft(2, '0')}:${stopWatchSeconds.value.toString().padLeft(2, '0')}.${stopWatchMilliseconds.value.toString().padLeft(2, '0')}';
 
   void pageChange() {
     pageController.animateToPage(
