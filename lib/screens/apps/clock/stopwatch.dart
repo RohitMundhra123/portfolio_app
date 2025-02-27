@@ -53,14 +53,71 @@ class _StopwatchAppState extends State<StopwatchApp>
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Expanded(child: _stopWatch()), _buttons()],
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [_stopWatch(), Flexible(child: _timeLapslistView())],
+              ),
+            ),
+            _buttons(),
+          ],
         ),
       ),
     );
   }
 
+  Widget _timeLapslistView() {
+    return Obx(
+      () => ListView.separated(
+        itemCount: _clockController.stopWatchLaps.length,
+        shrinkWrap: true,
+        separatorBuilder: (context, index) {
+          return const Divider(
+            height: 20,
+            color: CustomThemeData.dividerColor,
+            thickness: 1,
+          );
+        },
+        reverse: true,
+        itemBuilder: (context, index) {
+          return _timeLapsTile(index);
+        },
+      ),
+    );
+  }
+
+  Widget _timeLapsTile(int index) {
+    return Row(
+      children: [
+        Icon(Icons.flag, color: Colors.black),
+        const SizedBox(width: 10),
+        SizedBox(
+          width: 35,
+          child: Text(
+            '${index + 1}',
+            style: Get.textTheme.titleLarge?.copyWith(
+              fontFamily: "Monospace",
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        const Spacer(),
+        Text(
+          _clockController.stopWatchLaps[index],
+          style: Get.textTheme.titleLarge?.copyWith(
+            fontFamily: "Monospace",
+
+            color: CustomThemeData.primaryColorDark,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _stopWatch() {
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: Obx(
         () => Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -140,60 +197,70 @@ class _StopwatchAppState extends State<StopwatchApp>
 
   Widget _buttons() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 40),
+      padding: const EdgeInsets.symmetric(vertical: 15),
       child: SizedBox(
         width: Get.width,
         child: Obx(
           () => Stack(
             clipBehavior: Clip.none,
-            children: [
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                left: _clockController.stopWatchShowButtons.value ? 150 : 0,
-                top: 0,
-                bottom: 0,
-                right: 0,
-                child: IconButton(
-                  onPressed: () {
-                    _playPauseAnimationController.reverse();
-                    _clockController.resetStopWatch();
-                  },
-                  icon: _buttonTile(
-                    Icon(Icons.undo, color: Colors.white, size: 24),
-                  ),
-                ),
-              ),
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                right: _clockController.stopWatchShowButtons.value ? 150 : 0,
-                left: 0,
-                top: 0,
-                bottom: 0,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: _buttonTile(
-                    Icon(Icons.flag, color: Colors.white, size: 24),
-                  ),
-                ),
-              ),
-              Center(
-                child: IconButton(
-                  onPressed: () {
-                    playPauseAnimation();
-                  },
-                  icon: _buttonTile(
-                    AnimatedIcon(
-                      icon: AnimatedIcons.pause_play,
-                      progress: _playPauseAnimation,
-                      color: Colors.white,
-                      size: 36,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            children: [_reset(), _flag(), _playPause()],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _reset() {
+    return AnimatedPositioned(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      left: _clockController.stopWatchShowButtons.value ? 150 : 0,
+      top: 0,
+      bottom: 0,
+      right: 0,
+      child: IconButton(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onPressed: () {
+          _playPauseAnimationController.reverse();
+          _clockController.resetStopWatch();
+        },
+        icon: _buttonTile(Icon(Icons.undo, color: Colors.white, size: 24)),
+      ),
+    );
+  }
+
+  Widget _flag() {
+    return AnimatedPositioned(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      right: _clockController.stopWatchShowButtons.value ? 150 : 0,
+      left: 0,
+      top: 0,
+      bottom: 0,
+      child: IconButton(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onPressed: () {
+          _clockController.setFlag();
+        },
+        icon: _buttonTile(Icon(Icons.flag, color: Colors.white, size: 24)),
+      ),
+    );
+  }
+
+  Widget _playPause() {
+    return Center(
+      child: IconButton(
+        onPressed: () {
+          playPauseAnimation();
+        },
+        icon: _buttonTile(
+          AnimatedIcon(
+            icon: AnimatedIcons.pause_play,
+            progress: _playPauseAnimation,
+            color: Colors.white,
+            size: 36,
           ),
         ),
       ),

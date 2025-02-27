@@ -36,35 +36,41 @@ class _ClockAppState extends State<ClockApp> {
   }
 
   Widget _bottomNavigationBar() {
-    return SafeArea(
-      child: Obx(
-        () => BottomNavigationBar(
-          elevation: 0,
-          currentIndex: _clockController.currentIndex.value,
-          onTap: (index) {
-            _clockController.currentIndex.value = index;
-            _clockController.pageChange();
-          },
-          items: [
-            _bottomNavigationBarItem(
-              _clockController.currentIndex.value == 0
-                  ? Icons.access_time_filled
-                  : Icons.access_time_outlined,
-              'Clock',
-            ),
-            _bottomNavigationBarItem(
-              _clockController.currentIndex.value == 1
-                  ? Icons.alarm_add
-                  : Icons.alarm,
-              'Alarm',
-            ),
-            _bottomNavigationBarItem(
-              _clockController.currentIndex.value == 2
-                  ? Icons.timer
-                  : Icons.timer_outlined,
-              'Stopwatch',
-            ),
-          ],
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        _clockController.backPageInvoked();
+      },
+      child: SafeArea(
+        child: Obx(
+          () => BottomNavigationBar(
+            elevation: 0,
+            currentIndex: _clockController.currentIndex.value,
+            onTap: (index) {
+              _clockController.currentIndex.value = index;
+              _clockController.pageChange();
+            },
+            items: [
+              _bottomNavigationBarItem(
+                _clockController.currentIndex.value == 0
+                    ? Icons.access_time_filled
+                    : Icons.access_time_outlined,
+                'Clock',
+              ),
+              _bottomNavigationBarItem(
+                _clockController.currentIndex.value == 1
+                    ? Icons.alarm_add
+                    : Icons.alarm,
+                'Alarm',
+              ),
+              _bottomNavigationBarItem(
+                _clockController.currentIndex.value == 2
+                    ? Icons.timer
+                    : Icons.timer_outlined,
+                'Stopwatch',
+              ),
+            ],
+          ),
         ),
       ),
     );
