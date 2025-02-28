@@ -118,63 +118,62 @@ class _StopwatchAppState extends State<StopwatchApp>
   Widget _stopWatch() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Obx(
-        () => Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Obx(
+            () => Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                _timeText(
-                  _clockController.stopWatchHours.value.toString().padLeft(
-                    2,
-                    '0',
+                Center(child: _clockText()),
+                if (_clockController.stopWatchShowButtons.value)
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: CustomThemeData.primaryColorLight,
+                      border: Border.all(
+                        color: CustomThemeData.primaryColorDark,
+                        width: 2,
+                      ),
+                    ),
+                    margin: const EdgeInsets.symmetric(vertical: 20),
+
+                    child: Center(
+                      child: _timeText(
+                        (_clockController.stopWatchMilliseconds.value)
+                            .floor()
+                            .toString()
+                            .padLeft(2, '0'),
+                        fontSize: 24,
+                      ),
+                    ),
                   ),
-                ),
-                _semiColon(),
-                _timeText(
-                  _clockController.stopWatchMinutes.value.toString().padLeft(
-                    2,
-                    '0',
-                  ),
-                ),
-                _semiColon(),
-                _timeText(
-                  _clockController.stopWatchSeconds.value.toString().padLeft(
-                    2,
-                    '0',
-                  ),
-                ),
               ],
             ),
-            if (_clockController.stopWatchShowButtons.value)
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: CustomThemeData.primaryColorLight,
-                  border: Border.all(
-                    color: CustomThemeData.primaryColorDark,
-                    width: 2,
-                  ),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 20),
-
-                child: Center(
-                  child: _timeText(
-                    (_clockController.stopWatchMilliseconds.value)
-                        .floor()
-                        .toString()
-                        .padLeft(2, '0'),
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-          ],
-        ),
+          );
+        },
       ),
+    );
+  }
+
+  Widget _clockText() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _timeText(
+          _clockController.stopWatchHours.value.toString().padLeft(2, '0'),
+        ),
+        _semiColon(),
+        _timeText(
+          _clockController.stopWatchMinutes.value.toString().padLeft(2, '0'),
+        ),
+        _semiColon(),
+        _timeText(
+          _clockController.stopWatchSeconds.value.toString().padLeft(2, '0'),
+        ),
+      ],
     );
   }
 
