@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/constants/theme.dart';
 import 'package:my_portfolio/controllers/clock_controller.dart';
+import 'package:my_portfolio/utils/widgets/painter/clock_painter.dart';
 
 class StopwatchApp extends StatefulWidget {
   const StopwatchApp({super.key, required this.clockController});
@@ -57,7 +58,23 @@ class _StopwatchAppState extends State<StopwatchApp>
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [_stopWatch(), Flexible(child: _timeLapslistView())],
+                children: [
+                  Obx(
+                    () =>
+                        _clockController.stopWatchLaps.length > 4
+                            ? const SizedBox()
+                            : CustomPaint(
+                              size: const Size(200, 200),
+                              painter: ClockPainter(
+                                hour: _clockController.stopWatchHours.value,
+                                minute: _clockController.stopWatchMinutes.value,
+                                second: _clockController.stopWatchSeconds.value,
+                              ),
+                            ),
+                  ),
+                  _stopWatch(),
+                  Flexible(child: _timeLapslistView()),
+                ],
               ),
             ),
             _buttons(),
@@ -97,7 +114,7 @@ class _StopwatchAppState extends State<StopwatchApp>
           child: Text(
             '${index + 1}',
             style: Get.textTheme.titleLarge?.copyWith(
-              fontFamily: "Monospace",
+              fontFeatures: [const FontFeature.tabularFigures()],
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -106,8 +123,7 @@ class _StopwatchAppState extends State<StopwatchApp>
         Text(
           _clockController.stopWatchLaps[index],
           style: Get.textTheme.titleLarge?.copyWith(
-            fontFamily: "Monospace",
-
+            fontFeatures: [const FontFeature.tabularFigures()],
             color: CustomThemeData.primaryColorDark,
           ),
         ),

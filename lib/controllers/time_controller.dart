@@ -21,15 +21,15 @@ class TimeController extends GetxController {
     );
     var secondsRemaining = nextUpdate.difference(now).inMilliseconds / 1000;
 
-    Future.delayed(
-      Duration(milliseconds: (secondsRemaining * 1000).toInt()),
-      () {
-        currentTime.value = DateTime.now();
-        updateTime();
-      },
-    );
+    Future.delayed(Duration(milliseconds: (secondsRemaining).toInt()), () {
+      currentTime.value = DateTime.now();
+      updateTime();
+    });
   }
 
+  int get hour => currentTime.value.hour;
+  int get minute => currentTime.value.minute;
+  int get second => currentTime.value.second;
   String get fulltimeString =>
       '${currentTime.value.hour.toString().padLeft(2, '0')} : ${currentTime.value.minute.toString().padLeft(2, '0')} : ${currentTime.value.second.toString().padLeft(2, '0')}';
   String get timeString =>

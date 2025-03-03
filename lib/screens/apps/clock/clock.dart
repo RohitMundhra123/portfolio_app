@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/controllers/clock_controller.dart';
+import 'package:my_portfolio/screens/apps/clock/customclock.dart';
 import 'package:my_portfolio/screens/apps/clock/stopwatch.dart';
 import 'package:my_portfolio/utils/widgets/appbar_widget.dart';
 
@@ -23,7 +24,7 @@ class _ClockAppState extends State<ClockApp> {
       itemBuilder: (context, index) {
         switch (index) {
           case 0:
-            return Container();
+            return ClockWidget();
           case 1:
             return Container();
           case 2:
