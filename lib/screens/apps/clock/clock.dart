@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/controllers/clock_controller.dart';
+import 'package:my_portfolio/screens/apps/clock/addalarm.dart';
+import 'package:my_portfolio/screens/apps/clock/alarm.dart';
 import 'package:my_portfolio/screens/apps/clock/customclock.dart';
 import 'package:my_portfolio/screens/apps/clock/stopwatch.dart';
 import 'package:my_portfolio/utils/widgets/appbar_widget.dart';
@@ -26,7 +28,7 @@ class _ClockAppState extends State<ClockApp> {
           case 0:
             return ClockWidget();
           case 1:
-            return Container();
+            return AlarmApp(clockController: _clockController);
           case 2:
             return StopwatchApp(clockController: _clockController);
           default:
@@ -90,6 +92,23 @@ class _ClockAppState extends State<ClockApp> {
       appBar: customAppBar('Clock'),
       body: _body(),
       bottomNavigationBar: _bottomNavigationBar(),
+      floatingActionButton: Obx(
+        () =>
+            _clockController.currentIndex.value == 1
+                ? FloatingActionButton(
+                      backgroundColor: Get.theme.primaryColor,
+                      onPressed: () {
+                        Get.bottomSheet(
+                          AddAlarm(clockController: _clockController),
+                          isScrollControlled: true,
+                          elevation: 5,
+                        );
+                      },
+                      child: Icon(Icons.add, color: Colors.white),
+                    )
+                    as Widget
+                : SizedBox.shrink(),
+      ),
     );
   }
 }

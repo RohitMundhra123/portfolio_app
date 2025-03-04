@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_portfolio/models/alarm_model.dart';
 import 'package:my_portfolio/services/shared_preferences_service.dart';
 
 class ClockController extends GetxController {
@@ -14,6 +16,7 @@ class ClockController extends GetxController {
   final RxInt stopWatchSeconds = 0.obs;
   final RxInt stopWatchMilliseconds = 0.obs;
   final RxList<String> stopWatchLaps = <String>[].obs;
+  final RxList<AlarmModel> alarms = <AlarmModel>[].obs;
 
   final SharedPreferencesService _sharedPreferencesService =
       SharedPreferencesService();
@@ -49,6 +52,12 @@ class ClockController extends GetxController {
         stopWatchShowButtons.value = true;
       }
     }
+    _sharedPreferencesService
+        .getStringList(SharedPreferencesService.alarms)
+        ?.forEach((element) {
+          final alarm = AlarmModel.fromMap(jsonDecode(element));
+          alarms.add(alarm);
+        });
   }
 
   void pageChange() {
@@ -118,6 +127,37 @@ class ClockController extends GetxController {
       '${stopWatchMinutes.value.toString().padLeft(2, '0')}:'
       '${stopWatchSeconds.value.toString().padLeft(2, '0')}.'
       '${stopWatchMilliseconds.value.toString().padLeft(2, '0')}',
+    );
+  }
+
+  void addAlarm(AlarmModel alarm) {
+    alarms.add(alarm);
+    _sharedPreferencesService.setStringList(
+      SharedPreferencesService.alarms,
+      alarms.map((e) => jsonEncode(e.toMap())).toList(),
+    );
+  }
+
+  void deleteAlarm(AlarmModel alarm) {
+    alarms.remove(alarm);
+    _sharedPreferencesService.setStringList(
+      SharedPreferencesService.alarms,
+      alarms.map((e) => jsonEncode(e.toMap())).toList(),
+    );
+  }
+
+  void toogleAlarm(AlarmModel alarm) {
+    alarm.isActive = !alarm.isActive;
+    _sharedPreferencesService.setStringList(
+      SharedPreferencesService.alarms,
+      alarms.map((e) => jsonEncode(e.toMap())).toList(),
+    );
+  }
+
+  void updateAlarm(AlarmModel alarm) {
+    _sharedPreferencesService.setStringList(
+      SharedPreferencesService.alarms,
+      alarms.map((e) => jsonEncode(e.toMap())).toList(),
     );
   }
 }

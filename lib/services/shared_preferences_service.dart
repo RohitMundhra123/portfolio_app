@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPreferencesService {
   static const String stopWatchTime = 'stopWatchTime';
   static const String stopWatchLaps = 'stopWatchLaps';
+  static const String alarms = 'alarms';
 
   static final SharedPreferencesService _instance =
       SharedPreferencesService._internal();

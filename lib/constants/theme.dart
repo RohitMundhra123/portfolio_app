@@ -31,8 +31,20 @@ class CustomThemeData {
           side: BorderSide(color: dividerColor),
         ),
       ),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          textStyle: WidgetStatePropertyAll(
+            TextStyle(
+              color: CustomThemeData.primaryColorDark,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          visualDensity: VisualDensity.compact,
+        ),
+      ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        selectedItemColor: primaryColor,
+        selectedItemColor: primaryColorDark,
         unselectedItemColor: Colors.black87,
         selectedLabelStyle: TextStyle(
           fontSize: 14,
@@ -61,6 +73,18 @@ class CustomThemeData {
         iconTheme: IconThemeData(color: primaryTextColor),
         actionsIconTheme: IconThemeData(color: primaryTextColor),
         elevation: 0,
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          visualDensity: VisualDensity.compact,
+          textStyle: WidgetStatePropertyAll(
+            TextStyle(
+              color: CustomThemeData.primaryColorDark,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: primaryColor,
