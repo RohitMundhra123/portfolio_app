@@ -24,6 +24,8 @@ class _AddAlarmState extends State<AddAlarm> {
   void initState() {
     super.initState();
     _clockController = widget.clockController;
+    titleFocusNode.requestFocus();
+    titleController.text = 'Work';
   }
 
   @override
@@ -68,19 +70,21 @@ class _AddAlarmState extends State<AddAlarm> {
   }
 
   Widget _form() {
-    return Column(
-      children: [_alarmTime(), const SizedBox(height: 15), _description()],
-    );
+    return Column(children: [_description(), _alarmTime()]);
   }
 
   final TextEditingController titleController = TextEditingController();
   final FocusNode titleFocusNode = FocusNode();
 
   Widget _description() {
-    return ContentTextformfield(
-      contentController: titleController,
-      focusNode: titleFocusNode,
-      hintText: 'Title',
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: ContentTextformfield(
+        contentController: titleController,
+        focusNode: titleFocusNode,
+        dialog: true,
+        hintText: 'Title',
+      ),
     );
   }
 

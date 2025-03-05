@@ -6,12 +6,14 @@ class ContentTextformfield extends StatelessWidget {
     super.key,
     required this.contentController,
     required this.focusNode,
+    this.dialog = false,
     this.hintText,
   });
 
   final TextEditingController contentController;
   final FocusNode focusNode;
   final String? hintText;
+  final bool dialog;
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +22,12 @@ class ContentTextformfield extends StatelessWidget {
       keyboardType: TextInputType.multiline,
       maxLines: null,
       focusNode: focusNode,
-      style: Get.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
+      style: Get.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500),
       decoration: InputDecoration(
         hintText: hintText ?? 'Content',
         hintStyle: Get.textTheme.headlineSmall?.copyWith(
-          color: Colors.grey,
-          fontWeight: FontWeight.w600,
+          color: !dialog ? Colors.grey : null,
+          fontWeight: FontWeight.w500,
         ),
         border: InputBorder.none,
       ),
