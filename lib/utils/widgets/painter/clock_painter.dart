@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/constants/theme.dart';
@@ -9,11 +8,13 @@ class ClockPainter extends CustomPainter {
     required this.hour,
     required this.minute,
     required this.second,
+    this.onTimeChange,
   });
 
   final int hour;
   final int minute;
   final int second;
+  final Function(int)? onTimeChange;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -102,6 +103,22 @@ class ClockPainter extends CustomPainter {
     );
 
     canvas.drawCircle(center, 4, centerDial);
+  }
+
+  @override
+  bool? hitTest(Offset position) {
+    final dx = position.dx;
+    final dy = position.dy;
+    final centerX = 200 / 2;
+    final centerY = 200 / 2;
+    final angle = atan2(dy - centerY, dx - centerX);
+    final adjustedAngle = (angle + pi / 2) % (2 * pi);
+    final hour = (adjustedAngle / (pi / 6)).round() % 12;
+    print(hour);
+    if (onTimeChange != null) {
+      onTimeChange!(hour);
+    }
+    return super.hitTest(position);
   }
 
   @override
