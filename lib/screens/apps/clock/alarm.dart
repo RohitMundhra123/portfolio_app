@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/constants/theme.dart';
 import 'package:my_portfolio/controllers/clock_controller.dart';
+import 'package:my_portfolio/utils/widgets/painter/clock_picker_painter.dart';
 
 class AlarmApp extends StatefulWidget {
   const AlarmApp({super.key, required this.clockController});
@@ -14,6 +15,8 @@ class AlarmApp extends StatefulWidget {
 
 class _AlarmAppState extends State<AlarmApp> {
   late final ClockController _clockController;
+  int? selectedHour;
+  int? selectedMinute;
 
   @override
   void initState() {
@@ -41,6 +44,22 @@ class _AlarmAppState extends State<AlarmApp> {
                       style: Get.textTheme.headlineMedium?.copyWith(
                         color: CustomThemeData.secondaryTextColor,
                       ),
+                    ),
+                    CustomPaint(
+                      painter: ClockPickerPainter(
+                        selectedHour: selectedHour,
+                        selectedMinute: selectedMinute,
+                        onTimeChange: (hour) {
+                          setState(() {
+                            if (hour == 0) {
+                              selectedHour = 12;
+                            } else {
+                              selectedHour = hour;
+                            }
+                          });
+                        },
+                      ),
+                      size: const Size(200, 200),
                     ),
                   ],
                 ),
