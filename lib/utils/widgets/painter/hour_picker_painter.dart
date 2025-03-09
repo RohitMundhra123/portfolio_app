@@ -3,20 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:my_portfolio/constants/theme.dart';
 
-class ClockPickerPainter extends CustomPainter {
-  final int? selectedHour;
-  final int? selectedMinute;
+class HourPickerPainter extends CustomPainter {
+  final int selectedHour;
   final Function(int)? onTimeChange;
 
-  late int hour;
 
-  ClockPickerPainter({
-    required this.selectedHour,
-    required this.selectedMinute,
-    this.onTimeChange,
-  }) {
-    hour = selectedHour ?? 12;
-  }
+
+  HourPickerPainter({required this.selectedHour, this.onTimeChange});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -40,13 +33,13 @@ class ClockPickerPainter extends CustomPainter {
 
     final Paint selectedPaint =
         Paint()
-          ..color = CustomThemeData.primaryColor
+          ..color = CustomThemeData.accentColor
           ..style = PaintingStyle.fill
           ..strokeWidth = 2;
 
     final Paint dialPaint =
         Paint()
-          ..color = CustomThemeData.primaryColor
+          ..color = CustomThemeData.accentColor
           ..style = PaintingStyle.stroke
           ..strokeWidth = 4;
 
@@ -63,9 +56,10 @@ class ClockPickerPainter extends CustomPainter {
       textPainter.text = TextSpan(
         text: (i).toString(),
         style: TextStyle(
-          color: Colors.white,
+          color: i == selectedHour ? Colors.black : Colors.white,
           fontFamily: "monospace",
           fontSize: 16,
+          fontWeight: i == selectedHour ? FontWeight.bold : FontWeight.normal,
         ),
       );
 

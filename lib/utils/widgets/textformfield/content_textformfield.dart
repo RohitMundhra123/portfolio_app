@@ -29,7 +29,15 @@ class ContentTextformfield extends StatelessWidget {
           color: !dialog ? Colors.grey : null,
           fontWeight: FontWeight.w500,
         ),
-        border: InputBorder.none,
+        fillColor: dialog ? Colors.grey[200] : null,
+        filled: dialog,
+        border:
+            dialog
+                ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                )
+                : InputBorder.none,
       ),
     );
   }

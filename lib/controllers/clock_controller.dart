@@ -18,6 +18,9 @@ class ClockController extends GetxController {
   final RxList<String> stopWatchLaps = <String>[].obs;
   final RxList<AlarmModel> alarms = <AlarmModel>[].obs;
 
+  final Rx<TimeOfDay> alarmTime = TimeOfDay.now().obs;
+  final RxBool alarmIsAm = true.obs;
+
   final SharedPreferencesService _sharedPreferencesService =
       SharedPreferencesService();
 

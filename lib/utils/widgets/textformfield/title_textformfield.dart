@@ -21,6 +21,7 @@ class TitleTextformfield extends StatelessWidget {
       maxLength: 50,
       maxLines: null,
       focusNode: focusNode,
+
       decoration: InputDecoration(
         hintText: hintText ?? 'Heading',
         hintStyle: Get.textTheme.headlineLarge?.copyWith(
