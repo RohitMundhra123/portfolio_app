@@ -17,6 +17,7 @@ class ClockController extends GetxController {
   final RxInt stopWatchMilliseconds = 0.obs;
   final RxList<String> stopWatchLaps = <String>[].obs;
   final RxList<AlarmModel> alarms = <AlarmModel>[].obs;
+  final RxBool isHourSelected = true.obs;
 
   final Rx<TimeOfDay> alarmTime = TimeOfDay.now().obs;
   final RxBool alarmIsAm = true.obs;

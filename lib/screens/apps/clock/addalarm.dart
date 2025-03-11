@@ -5,6 +5,7 @@ import 'package:my_portfolio/constants/theme.dart';
 import 'package:my_portfolio/controllers/clock_controller.dart';
 import 'package:my_portfolio/models/alarm_model.dart';
 import 'package:my_portfolio/utils/widgets/custom_snackbar.dart';
+import 'package:my_portfolio/utils/widgets/painter/hour_picker_painter.dart';
 import 'package:my_portfolio/utils/widgets/painter/minute_picker_painter.dart';
 import 'package:my_portfolio/utils/widgets/textformfield/content_textformfield.dart';
 
@@ -29,29 +30,29 @@ class _AddAlarmState extends State<AddAlarm> {
   }
 
   @override
+  void dispose() {
+    titleController.dispose();
+    titleFocusNode.dispose();
+    _clockController.alarmTime.value = TimeOfDay.now();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (titleFocusNode.hasFocus) {
-          titleFocusNode.unfocus();
-        } else {
-          titleFocusNode.requestFocus();
-        }
-      },
-      child: Container(
-        height: Get.height * 0.7,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadiusDirectional.vertical(
-            top: Radius.circular(25),
-          ),
-          border: Border(
-            top: BorderSide(color: CustomThemeData.primaryColor, width: 2),
-          ),
-          color: CustomThemeData.primaryColorLight,
+    return Container(
+      height: Get.height * 0.7,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadiusDirectional.vertical(
+          top: Radius.circular(25),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        child: _body(),
+        border: Border(
+          top: BorderSide(color: CustomThemeData.primaryColor, width: 2),
+        ),
+        color: CustomThemeData.primaryColorLight,
       ),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      child: _body(),
     );
   }
 
@@ -101,28 +102,34 @@ class _AddAlarmState extends State<AddAlarm> {
               children: [
                 CustomPaint(
                   painter:
-                  // HourPickerPainter(
-                  //   selectedHour:
-                  //       _clockController.alarmTime.value.hour % 12 == 0
-                  //           ? 12
-                  //           : _clockController.alarmTime.value.hour % 12,
-                  //   onTimeChange: (hour) {
-                  //     _clockController.alarmTime.value = TimeOfDay(
-                  //       hour:
-                  //           _clockController.alarmIsAm.value ? hour : hour + 12,
-                  //       minute: _clockController.alarmTime.value.minute,
-                  //     );
-                  //   },
-                  // ),
-                  MinutePickerPainter(
-                    selectedMinute: _clockController.alarmTime.value.minute,
-                    onTimeChange: (minute) {
-                      _clockController.alarmTime.value = TimeOfDay(
-                        hour: _clockController.alarmTime.value.hour,
-                        minute: minute,
-                      );
-                    },
-                  ),
+                      _clockController.isHourSelected.value
+                          ? HourPickerPainter(
+                            selectedHour:
+                                _clockController.alarmTime.value.hour % 12 == 0
+                                    ? 12
+                                    : _clockController.alarmTime.value.hour %
+                                        12,
+                            onTimeChange: (hour) {
+                              _clockController.isHourSelected.value = false;
+                              _clockController.alarmTime.value = TimeOfDay(
+                                hour:
+                                    _clockController.alarmIsAm.value
+                                        ? hour
+                                        : hour + 12,
+                                minute: _clockController.alarmTime.value.minute,
+                              );
+                            },
+                          )
+                          : MinutePickerPainter(
+                            selectedMinute:
+                                _clockController.alarmTime.value.minute,
+                            onTimeChange: (minute) {
+                              _clockController.alarmTime.value = TimeOfDay(
+                                hour: _clockController.alarmTime.value.hour,
+                                minute: minute,
+                              );
+                            },
+                          ),
                   size: const Size(200, 200),
                 ),
                 const SizedBox(width: 20),
@@ -167,12 +174,18 @@ class _AddAlarmState extends State<AddAlarm> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _timeTile(_clockController.alarmTime.value.hour),
+        GestureDetector(
+          onTap: () => _clockController.isHourSelected.value = true,
+          child: _timeTile(_clockController.alarmTime.value.hour),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(':', style: Get.textTheme.headlineSmall),
         ),
-        _timeTile(_clockController.alarmTime.value.minute),
+        GestureDetector(
+          onTap: () => _clockController.isHourSelected.value = false,
+          child: _timeTile(_clockController.alarmTime.value.minute),
+        ),
       ],
     );
   }
@@ -222,8 +235,11 @@ class _AddAlarmState extends State<AddAlarm> {
   Widget _heading() {
     return Row(
       children: [
-        TextButton(
-          child: const Text('Cancel'),
+        IconButton(
+          icon: const Icon(
+            Icons.cancel,
+            color: CustomThemeData.primaryTextColor,
+          ),
           onPressed: () {
             Get.back();
           },
@@ -235,8 +251,11 @@ class _AddAlarmState extends State<AddAlarm> {
             textAlign: TextAlign.center,
           ),
         ),
-        TextButton(
-          child: const Text('Add'),
+        IconButton(
+          icon: const Icon(
+            Icons.add_card,
+            color: CustomThemeData.primaryTextColor,
+          ),
           onPressed: () {
             if (titleController.text.isEmpty) {
               CustomSnackBar(
