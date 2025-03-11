@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:my_portfolio/constants/theme.dart';
 import 'package:my_portfolio/controllers/clock_controller.dart';
 import 'package:my_portfolio/models/alarm_model.dart';
+import 'package:my_portfolio/utils/widgets/custom_switch.dart';
 
 class AlarmApp extends StatefulWidget {
   const AlarmApp({super.key, required this.clockController});
@@ -50,8 +51,11 @@ class _AlarmAppState extends State<AlarmApp> {
                     ],
                   ),
                 )
-                : ListView.builder(
+                : ListView.separated(
                   itemCount: _clockController.alarms.length,
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(height: 20);
+                  },
                   itemBuilder: (context, index) {
                     return _alarmTile(_clockController.alarms[index]);
                   },
@@ -61,52 +65,77 @@ class _AlarmAppState extends State<AlarmApp> {
   }
 
   Widget _alarmTile(AlarmModel alarm) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      decoration: BoxDecoration(
-        color:
-            alarm.isActive
-                ? CustomThemeData.accentColor
-                : CustomThemeData.primaryColorLight,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        children: [
-          Column(
+    return GestureDetector(
+      onTap: () => _clockController.onTapAlarm(alarm),
+      onLongPress: () => _clockController.onLongTapAlarm(alarm),
+      child: Obx(
+        () => AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          decoration: BoxDecoration(
+            color:
+                _clockController.selectedAlarms.contains(alarm)
+                    ? Colors.red
+                    : alarm.isActive
+                    ? CustomThemeData.accentColor
+                    : CustomThemeData.primaryColorLight,
+            borderRadius:
+                _clockController.selectedAlarms.contains(alarm)
+                    ? BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    )
+                    : BorderRadius.circular(20),
+          ),
+          margin:
+              _clockController.selectedAlarms.contains(alarm)
+                  ? const EdgeInsets.symmetric(horizontal: 15)
+                  : EdgeInsets.all(0),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                alarm.description,
-                style: Get.textTheme.headlineSmall?.copyWith(
-                  color:
-                      alarm.isActive
-                          ? Colors.white
-                          : CustomThemeData.secondaryTextColor,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    alarm.description,
+                    style: Get.textTheme.headlineSmall?.copyWith(
+                      color:
+                          _clockController.selectedAlarms.contains(alarm)
+                              ? Colors.white
+                              : alarm.isActive
+                              ? Colors.white
+                              : CustomThemeData.secondaryTextColor,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    '${alarm.alarmTime.hour.toString().padLeft(2, '0')}:${alarm.alarmTime.minute.toString().padLeft(2, '0')} ${alarm.alarmTime.period == DayPeriod.am ? 'AM' : 'PM'}',
+                    style: Get.textTheme.headlineMedium?.copyWith(
+                      color:
+                          _clockController.selectedAlarms.contains(alarm)
+                              ? Colors.white
+                              : alarm.isActive
+                              ? Colors.white
+                              : CustomThemeData.secondaryTextColor,
+                      fontWeight: FontWeight.w900,
+                      fontFeatures: [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 5),
-              Text(
-                '${alarm.alarmTime.hour}:${alarm.alarmTime.minute} ${alarm.alarmTime.period == DayPeriod.am ? 'AM' : 'PM'}',
-                style: Get.textTheme.headlineMedium?.copyWith(
-                  color:
-                      alarm.isActive
-                          ? Colors.white
-                          : CustomThemeData.secondaryTextColor,
-                  fontWeight: FontWeight.w900,
-                ),
+              const Spacer(),
+              CustomSwitch(
+                value: alarm.isActive,
+                onChanged: (value) {
+                  _clockController.toogleAlarm(alarm);
+                  _clockController.alarms.refresh();
+                },
               ),
             ],
           ),
-          const Spacer(),
-          Switch(
-            value: alarm.isActive,
-            onChanged: (value) {
-              _clockController.toogleAlarm(alarm);
-              _clockController.alarms.refresh();
-            },
-          ),
-        ],
+        ),
       ),
     );
   }

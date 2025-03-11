@@ -96,15 +96,28 @@ class _ClockAppState extends State<ClockApp> {
         () =>
             _clockController.currentIndex.value == 1
                 ? FloatingActionButton(
-                      backgroundColor: Get.theme.primaryColor,
+                      backgroundColor:
+                          _clockController.selectedAlarms.isNotEmpty
+                              ? Colors.red
+                              : Get.theme.primaryColor,
                       onPressed: () {
-                        Get.bottomSheet(
-                          AddAlarm(clockController: _clockController),
-                          isScrollControlled: true,
-                          elevation: 5,
-                        );
+                        if (_clockController.selectedAlarms.isNotEmpty) {
+                          _clockController.deleteAlarms();
+                          return;
+                        } else {
+                          Get.bottomSheet(
+                            AddAlarm(clockController: _clockController),
+                            isScrollControlled: true,
+                            elevation: 5,
+                          );
+                        }
                       },
-                      child: Icon(Icons.add, color: Colors.white),
+                      child: Icon(
+                        _clockController.selectedAlarms.isNotEmpty
+                            ? Icons.delete
+                            : Icons.add,
+                        color: Colors.white,
+                      ),
                     )
                     as Widget
                 : SizedBox.shrink(),

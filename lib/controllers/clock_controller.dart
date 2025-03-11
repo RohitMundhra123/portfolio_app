@@ -17,6 +17,7 @@ class ClockController extends GetxController {
   final RxInt stopWatchMilliseconds = 0.obs;
   final RxList<String> stopWatchLaps = <String>[].obs;
   final RxList<AlarmModel> alarms = <AlarmModel>[].obs;
+  final RxList<AlarmModel> selectedAlarms = <AlarmModel>[].obs;
   final RxBool isHourSelected = true.obs;
 
   final Rx<TimeOfDay> alarmTime = TimeOfDay.now().obs;
@@ -142,8 +143,10 @@ class ClockController extends GetxController {
     );
   }
 
-  void deleteAlarm(AlarmModel alarm) {
-    alarms.remove(alarm);
+  void deleteAlarms() {
+    alarms.removeWhere((element) => selectedAlarms.contains(element));
+    selectedAlarms.clear();
+    alarms.refresh();
     _sharedPreferencesService.setStringList(
       SharedPreferencesService.alarms,
       alarms.map((e) => jsonEncode(e.toMap())).toList(),
@@ -163,5 +166,19 @@ class ClockController extends GetxController {
       SharedPreferencesService.alarms,
       alarms.map((e) => jsonEncode(e.toMap())).toList(),
     );
+  }
+
+  void onLongTapAlarm(AlarmModel alarm) {
+    if (selectedAlarms.contains(alarm)) {
+      selectedAlarms.remove(alarm);
+    } else {
+      selectedAlarms.add(alarm);
+    }
+  }
+
+  void onTapAlarm(AlarmModel alarm) {
+    if (selectedAlarms.isNotEmpty) {
+      onLongTapAlarm(alarm);
+    } else {}
   }
 }
