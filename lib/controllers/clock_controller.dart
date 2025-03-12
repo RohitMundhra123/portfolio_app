@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portfolio/models/alarm_model.dart';
+import 'package:my_portfolio/screens/apps/clock/addalarm.dart';
 import 'package:my_portfolio/services/shared_preferences_service.dart';
 
 class ClockController extends GetxController {
@@ -161,7 +162,10 @@ class ClockController extends GetxController {
     );
   }
 
-  void updateAlarm(AlarmModel alarm) {
+  void updateAlarm(AlarmModel oldalarm, AlarmModel newAlarm) {
+    final index = alarms.indexWhere((element) => element == oldalarm);
+    alarms[index] = newAlarm;
+    alarms.refresh();
     _sharedPreferencesService.setStringList(
       SharedPreferencesService.alarms,
       alarms.map((e) => jsonEncode(e.toMap())).toList(),
@@ -179,6 +183,12 @@ class ClockController extends GetxController {
   void onTapAlarm(AlarmModel alarm) {
     if (selectedAlarms.isNotEmpty) {
       onLongTapAlarm(alarm);
-    } else {}
+    } else {
+      Get.bottomSheet(
+        AddAlarm(clockController: this, alarm: alarm),
+        isScrollControlled: true,
+        elevation: 5,
+      );
+    }
   }
 }

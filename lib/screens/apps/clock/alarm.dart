@@ -27,40 +27,41 @@ class _AlarmAppState extends State<AlarmApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Obx(
-        () =>
-            _clockController.alarms.isEmpty
-                ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.alarm_off,
-                        size: 100,
+    return Obx(
+      () =>
+          _clockController.alarms.isEmpty
+              ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.alarm_off,
+                      size: 100,
+                      color: CustomThemeData.secondaryTextColor,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'No Alarms Set Yet!!!',
+                      style: Get.textTheme.headlineMedium?.copyWith(
                         color: CustomThemeData.secondaryTextColor,
                       ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'No Alarms Set Yet!!!',
-                        style: Get.textTheme.headlineMedium?.copyWith(
-                          color: CustomThemeData.secondaryTextColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-                : ListView.separated(
-                  itemCount: _clockController.alarms.length,
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: 20);
-                  },
-                  itemBuilder: (context, index) {
-                    return _alarmTile(_clockController.alarms[index]);
-                  },
+                    ),
+                  ],
                 ),
-      ),
+              )
+              : ListView.separated(
+                itemCount: _clockController.alarms.length,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 25,
+                  horizontal: 15,
+                ),
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: 20);
+                },
+                itemBuilder: (context, index) {
+                  return _alarmTile(_clockController.alarms[index]);
+                },
+              ),
     );
   }
 

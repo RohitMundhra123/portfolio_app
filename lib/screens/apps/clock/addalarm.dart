@@ -10,9 +10,10 @@ import 'package:my_portfolio/utils/widgets/painter/minute_picker_painter.dart';
 import 'package:my_portfolio/utils/widgets/textformfield/content_textformfield.dart';
 
 class AddAlarm extends StatefulWidget {
-  const AddAlarm({super.key, required this.clockController});
+  const AddAlarm({super.key, required this.clockController, this.alarm});
 
   final ClockController clockController;
+  final AlarmModel? alarm;
 
   @override
   State<AddAlarm> createState() => _AddAlarmState();
@@ -20,20 +21,31 @@ class AddAlarm extends StatefulWidget {
 
 class _AddAlarmState extends State<AddAlarm> {
   late final ClockController _clockController;
+  AlarmModel? _alarm;
 
   @override
   void initState() {
     super.initState();
     _clockController = widget.clockController;
+    _alarm = widget.alarm;
+
+    if (_alarm == null) {
+      _clockController.alarmTime.value = TimeOfDay.now();
+      titleController.text = 'Work';
+    } else {
+      _clockController.alarmTime.value = _alarm!.alarmTime;
+      titleController.text = _alarm!.description;
+      _clockController.alarmIsAm.value =
+          _alarm!.alarmTime.period == DayPeriod.am;
+    }
+
     titleFocusNode.requestFocus();
-    titleController.text = 'Work';
   }
 
   @override
   void dispose() {
     titleController.dispose();
     titleFocusNode.dispose();
-    _clockController.alarmTime.value = TimeOfDay.now();
 
     super.dispose();
   }
@@ -257,36 +269,68 @@ class _AddAlarmState extends State<AddAlarm> {
             color: CustomThemeData.primaryTextColor,
           ),
           onPressed: () {
-            if (titleController.text.isEmpty) {
-              CustomSnackBar(
-                message: 'Please enter a Title',
-                title: 'Error',
-                icon: Icons.error,
-              ).show();
-              return;
-            } else {
-              _clockController.addAlarm(
-                AlarmModel(
-                  id:
-                      DateTime.fromMicrosecondsSinceEpoch(
-                        DateTime.now().microsecondsSinceEpoch,
-                      ).toString(),
-                  alarmTime: _clockController.alarmTime.value,
-                  description: titleController.text,
-                  isActive: true,
-                ),
-              );
-              Get.back();
-              CustomSnackBar(
-                message:
-                    'Alarm Added for ${_clockController.alarmTime.value.format(context)}',
-                title: 'Success',
-                icon: Icons.check_circle,
-              ).show();
-            }
+            _alarm == null ? addAlarm() : updateAlarm();
           },
         ),
       ],
     );
+  }
+
+  addAlarm() {
+    if (titleController.text.isEmpty) {
+      CustomSnackBar(
+        message: 'Please enter a Title',
+        title: 'Error',
+        icon: Icons.error,
+      ).show();
+      return;
+    } else {
+      _clockController.addAlarm(
+        AlarmModel(
+          id:
+              DateTime.fromMicrosecondsSinceEpoch(
+                DateTime.now().microsecondsSinceEpoch,
+              ).toString(),
+          alarmTime: _clockController.alarmTime.value,
+          description: titleController.text,
+          isActive: true,
+        ),
+      );
+      Get.back();
+      CustomSnackBar(
+        message:
+            'Alarm Added for ${_clockController.alarmTime.value.format(context)}',
+        title: 'Success',
+        icon: Icons.check_circle,
+      ).show();
+    }
+  }
+
+  updateAlarm() {
+    if (titleController.text.isEmpty) {
+      CustomSnackBar(
+        message: 'Please enter a Title',
+        title: 'Error',
+        icon: Icons.error,
+      ).show();
+      return;
+    } else {
+      _clockController.updateAlarm(
+        _alarm!,
+        AlarmModel(
+          id: _alarm!.id,
+          alarmTime: _clockController.alarmTime.value,
+          description: titleController.text,
+          isActive: true,
+        ),
+      );
+      Get.back();
+      CustomSnackBar(
+        message:
+            'Alarm Changed to ${_clockController.alarmTime.value.format(context)}',
+        title: 'Success',
+        icon: Icons.check_circle,
+      ).show();
+    }
   }
 }
