@@ -5,6 +5,7 @@ import 'package:my_portfolio/screens/apps/calculator.dart';
 import 'package:my_portfolio/screens/apps/calendar/calendar.dart';
 import 'package:my_portfolio/screens/apps/clock/clock.dart';
 import 'package:my_portfolio/screens/apps/note/notes.dart';
+import 'package:my_portfolio/screens/apps/weather.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({super.key});
@@ -92,11 +93,11 @@ class _FirstPageState extends State<FirstPage> {
         // );
       }),
       _appButton('Weather', Icons.wb_sunny, () {
-        // Get.to(
-        //   () => const WeatherApp(),
-        //   transition: Transition.fadeIn,
-        //   duration: const Duration(milliseconds: 500),
-        // );
+        Get.to(
+          () => const WeatherApp(),
+          transition: Transition.fadeIn,
+          duration: const Duration(milliseconds: 500),
+        );
       }),
       _appButton('Music', Icons.music_note, () {
         // Get.to(
