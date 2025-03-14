@@ -12,6 +12,5 @@ Flow of this project
            c. Calendar
            d. Clock
            e. Settings
-           f. Weather
-           g. Music
+           f. Music
 

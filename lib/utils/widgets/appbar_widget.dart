@@ -13,8 +13,6 @@ IconData getIcon(String title) {
     return Icons.notes;
   } else if (title == 'Calculator') {
     return Icons.calculate;
-  } else if (title == 'Weather') {
-    return Icons.wb_sunny;
   } else if (title == 'Settings') {
     return Icons.settings;
   } else if (title == 'Clock') {

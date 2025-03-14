@@ -91,13 +91,7 @@ class _FirstPageState extends State<FirstPage> {
         //   duration: const Duration(milliseconds: 500),
         // );
       }),
-      _appButton('Weather', Icons.wb_sunny, () {
-        // Get.to(
-        //   () => const WeatherApp(),
-        //   transition: Transition.fadeIn,
-        //   duration: const Duration(milliseconds: 500),
-        // );
-      }),
+  
       _appButton('Music', Icons.music_note, () {
         // Get.to(
         //   () => const MusicApp(),
